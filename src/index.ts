@@ -1,1 +1,1 @@
-export {sayHello, sayGoodbye} from './JulianDate'
+export {gregorianToJulianDate} from './JulianDate'
