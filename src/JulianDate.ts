@@ -1,4 +1,12 @@
-
+/**
+ * Convert gregorian date to julian day number, using the algorithm described in:
+ * Meeus, Jean: Astronomical Algorithms. Second edition. Richmond, Virginia, 1998. Page 60.
+ *
+ * @param year - in gregorian calendar (A.D.)
+ * @param month - in gregorian calendar (January == 1)
+ * @param day - in gregorian calendar, note that also passing fractions of days is allowed.
+ * @return Julian day number
+ */
 export function gregorianToJulianDate(year : number, month : number, day : number) : number {
   let y : number = month > 2 ? year : year -1;
   let m : number = month > 2 ? month : month + 12;
