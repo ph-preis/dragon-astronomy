@@ -1,3 +1,3 @@
 export {gregorianDateToJulianDayNumber} from './JulianDate'
 export {timeToDayFraction} from './DateUtils'
-export {julianDateToGreenwichMeanSiderealTime} from './SiderealTime'
+export {julianDayNumberToGreenwichMeanSiderealTime} from './SiderealTime'

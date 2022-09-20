@@ -5,6 +5,12 @@
     "declaration": true,
     "outDir": "./dist"
   },
+  "jest": {
+    "transform": {
+      "node_modules/variables/.+\\.(j|t)sx?$": "ts-jest"
+    }
+  },
+
   "include": [
     "src/**/*"
   ]
