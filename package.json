@@ -1,6 +1,6 @@
 {
   "name": "dragon-astronomy",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Calculation of GMST (Greenwich Mean Sidereal Time)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
