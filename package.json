@@ -10,11 +10,13 @@
   "scripts": {
     "test": "jest"
   },
+  "overrides" : {
+    "@types/prettier" : "<2.6.0"
+  },
   "devDependencies": {
     "jest": "^29.0.3",
     "ts-jest": "^29.0.1",
-    "ts-node": "^10.9.1",
-    "@types/jest": "^29.0.3"
+    "ts-node": "^10.9.1"
   },
   "repository": {
     "type": "git",
