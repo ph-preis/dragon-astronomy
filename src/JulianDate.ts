@@ -7,7 +7,7 @@
  * @param day - in gregorian calendar, note that also passing fractions of days is allowed.
  * @return Julian day number
  */
-export function gregorianToJulianDate(year : number, month : number, day : number) : number {
+export function gregorianDateToJulianDayNumber(year : number, month : number, day : number) : number {
   let y : number = month > 2 ? year : year -1;
   let m : number = month > 2 ? month : month + 12;
   let d : number = day;
