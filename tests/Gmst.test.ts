@@ -23,6 +23,10 @@ describe('gregorianDateToJulianDayNumber', () => {
         expect(gregorianDateToJulianDayNumber(2022, 9, 20)).toBe(2459842.5);
     });
 
+    test('another recent date', () => {
+        expect(gregorianDateToJulianDayNumber(2022, 1, 20)).toBe(2459599.5);
+    });
+
     test('example 12.a from book', () => {
         expect(gregorianDateToJulianDayNumber(1987, 4, 10)).toBe(2446895.5);
     });
