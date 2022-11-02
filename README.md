@@ -6,7 +6,7 @@ Meeus, Jean: Astronomical Algorithms. Second edition. Richmond, Virginia, 1998.
 
 #### Calculating Greenwich Mean Sidereal Time (GMST)
 
-Get the julian date number (JDN) at 00:00:00 UT (Universal Time) by using:
+Get the julian day number (JDN) at 00:00:00 UT (Universal Time) by using:
 
 ``let jdn : number = gregorianDateToJulianDayNumber(newDate.getUTCFullYear(), newDate.getUTCMonth()+1, newDate.getUTCDate())``
 
@@ -32,7 +32,7 @@ Get the GMST as above.
 
 Then use the geographical longitude of the current location to determine how many seconds need to be added to it.
  
-``360° == 24h == 24*60*60s = 86400s``
+``360° == 24h == 24*60*60s == 86400s``
 
 For example, for the longitude of Berlin (13.41°E) at 16:15:27 the local MST is
 
