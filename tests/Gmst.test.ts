@@ -1,6 +1,9 @@
 
 import {
-    EquatorialCoordinate, greenwichMeanSiderealTimeToLocalMeanSiderealTime, gregorianDateToJulianDayNumber,
+    EquatorialCoordinate,
+    greenwichMeanSiderealTimeToLocalMeanSiderealTime,
+    gregorianDateToJulianDayNumber,
+    HorizontalCoordinate,
     julianDayNumberToGreenwichMeanSiderealTime,
     timeToDayFraction
 } from "../src";
@@ -61,7 +64,8 @@ describe('starCoordinates', () => {
 
 });
 
-/* data for the next test:
+/* Data for the next test:
+
 Current date (local): 2022-11-06 20:00:29
 Current date (UTC): 2022-11-06 19:00:29
 Julian date (current UTC): 2459890.2920023147
@@ -78,10 +82,20 @@ Polaris azimuth: 0.017127232361280796rad = 0.9813181290412728° =0°58'0.8790877
 Polaris altitude: 0.9242232902032961rad = 52.95409385634355°
 Mizar azimuth: 5.906936254323217rad = 338.44251722553537° =338°26'0.5510335321221183''
 Mizar altitude: 0.37716758735416495rad = 21.61011092452545°
- */
-describe('localMST', () => {
 
-    test('local mst', () => {
+Due to rounding errors in intermediate calculation steps of the test, the values are slightly off the expected value above.
+The result was compared with the display in https://stellarium.org/
+The data don't match the Stellarium display exactly as more complex formulas than Meeus's are used there. But the
+result is sufficiently precise for practical purposes in amateur astronomy. The observed discrepancy of the result
+coordinate was in the range of < 0.5°.
+
+ */
+describe('coordinateConversion', () => {
+
+    test('polaris', () => {
+
+        // this is an example of the full calculation of a star position, from equatorial coordinates to
+        // horizontal coordinates
 
         let jdnUtc0 = gregorianDateToJulianDayNumber(2022, 11, 6);
         expect(jdnUtc0).toBe(2459889.5);
@@ -95,6 +109,22 @@ describe('localMST', () => {
         let lmst = greenwichMeanSiderealTimeToLocalMeanSiderealTime(gmst, 13.41 /* Berlin longitude*/);
         expect(lmst).toBe(82681.57318261731); // LMST Berlin is 22:58:01 at 19:00:29 UTC
 
+        const berlinLatitudeRad = 52.52 * 2 * Math.PI / 360;
+
+        let polaris = EquatorialCoordinate.fromTimeAndDegree(89, 15, 50.8, 2, 31, 49.09);
+
+        let alt = polaris.calculateAltitude(lmst / 86400 * 2 * Math.PI, berlinLatitudeRad);
+        let az = polaris.calculateAzimuth(lmst / 86400 * 2 * Math.PI, berlinLatitudeRad);
+
+        // this is the final result - we have converted equatorial coordinates to horizontal coordinates.
+        expect(alt).toBe(0.9242257590670654); // in radians - for the polar star, this is by definition approximately the same as berlinLatitudeRad
+        expect(az).toBe(0.017126264029972325); // in radians
+
+        // do the same calculation again, just to test fromEquatorialCoordinate()
+        let polarisHorizontalCoordinates =
+            HorizontalCoordinate.fromEquatorialCoordinate(polaris, lmst / 86400 * 2 * Math.PI, berlinLatitudeRad);
+        expect(polarisHorizontalCoordinates.altitude).toBe(alt);
+        expect(polarisHorizontalCoordinates.azimuth).toBe(az);
     });
 
 });

@@ -4,7 +4,21 @@ Typescript library for astronomy calculations.
 Based on formulas from:
 Meeus, Jean: Astronomical Algorithms. Second edition. Richmond, Virginia, 1998.
 
-#### Calculating Greenwich Mean Sidereal Time (GMST)
+#### Content
+
+The main purpose of this library is the transformation of equatorial star coordinates to horizontal star coordinates.
+
+This allows to calculate the position of a star in the sky at a given observation time and place (on Earth).
+
+The library is not meant to be a precise tool for professional purposes, only as a sufficiently accurate approximation for amateur astronomy. Test results were in the range of < 0.5° deviation from https://stellarium.org/. 
+
+#### Usage
+
+For a full usage example see the coordinateConversion test in Gmst.test.ts - the following text describes the steps
+of this test in more detail.
+
+
+##### Calculating Greenwich Mean Sidereal Time (GMST)
 
 Get the julian day number (JDN) at 00:00:00 UT (Universal Time) by using:
 
@@ -26,7 +40,7 @@ The result can contain several days and can be negative. Thus:
 
 The result is the number of seconds that has passed on the current day, these need to be converted to hours/minutes/seconds to get the time of the day (which is the GMST).
 
-#### Calculating Local Mean Sidereal Time
+##### Calculating Local Mean Sidereal Time (LMST)
 
 Get the GMST as above.
 
@@ -37,3 +51,19 @@ Then use the geographical longitude of the current location to determine how man
 For example, for the longitude of Berlin (13.41°E) at 16:15:27 the local MST is
 
 ``let lmst_berlin = gmst_at_16_15_27 + 13.41 / 360 * 86400 ``
+
+##### Calculate Horizontal coordinates of a given star
+
+Get the geographical latitude (in radians):
+
+``let berlinLatitudeRad = 52.52 * 2 * Math.PI / 360;``
+
+Look up the Equatorial coordinates of the star (declination and right ascension), for example in Wikipedia. Then create an EquatorialCoordinate object for them, e.g.
+
+``let polaris = EquatorialCoordinate.fromTimeAndDegree(89, 15, 50.8, 2, 31, 49.09);``
+
+Then use the conversion function to obtain a Horizontal coordinate (altitude and azimuth). The LMST must be converted to radians before.
+
+``let polarisHorizontalCoordinates = HorizontalCoordinate.fromEquatorialCoordinate(polaris, lmst / 86400 * 2 * Math.PI, berlinLatitudeRad);``
+
+The result is in polarisHorizontalCoordinates.altitude and polarisHorizontalCoordinates.azimuth - it is in radians.

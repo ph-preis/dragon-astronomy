@@ -16,3 +16,4 @@ export function timeToDayFraction(hours : number, minutes : number, seconds : nu
     let result : number = (hours * 60 * 60 + minutes * 60 + seconds) / (60 * 60 * 24);
     return result;
 }
+
