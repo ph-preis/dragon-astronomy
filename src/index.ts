@@ -1,3 +1,7 @@
 export {gregorianDateToJulianDayNumber} from './JulianDate'
 export {timeToDayFraction} from './DateUtils'
+export {greenwichMeanSiderealTimeToLocalMeanSiderealTime} from './SiderealTime'
 export {julianDayNumberToGreenwichMeanSiderealTime} from './SiderealTime'
+export {timeOfDayToSiderealSeconds} from './SiderealTime'
+export {EquatorialCoordinate} from './StarCoordinates'
+export {HorizontalCoordinate} from './StarCoordinates'
