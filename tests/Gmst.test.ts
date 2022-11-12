@@ -1,6 +1,6 @@
 
 import {
-    EquatorialCoordinate,
+    EquatorialCoordinate, getLocalMeanSiderealTime,
     greenwichMeanSiderealTimeToLocalMeanSiderealTime,
     gregorianDateToJulianDayNumber,
     HorizontalCoordinate,
@@ -120,11 +120,20 @@ describe('coordinateConversion', () => {
         expect(alt).toBe(0.9242257590670654); // in radians - for the polar star, this is by definition approximately the same as berlinLatitudeRad
         expect(az).toBe(0.017126264029972325); // in radians
 
-        // do the same calculation again, just to test fromEquatorialCoordinate()
+        // do the same calculation again, just to test fromEquatorialCoordinateRadians()
         let polarisHorizontalCoordinates =
-            HorizontalCoordinate.fromEquatorialCoordinate(polaris, lmst / 86400 * 2 * Math.PI, berlinLatitudeRad);
+            HorizontalCoordinate.fromEquatorialCoordinateRadians(polaris, lmst / 86400 * 2 * Math.PI, berlinLatitudeRad);
         expect(polarisHorizontalCoordinates.altitude).toBe(alt);
         expect(polarisHorizontalCoordinates.azimuth).toBe(az);
+
+        // and yet another test, for the shortcut functions
+        let lmst2 = getLocalMeanSiderealTime(2022, 11, 6, 19, 0, 29, 13.41);
+        expect(lmst2).toBe(lmst);
+
+        let polarisHorizontalCoordinates2 =
+            HorizontalCoordinate.fromEquatorialCoordinateDegree(polaris, lmst2, 52.52);
+        expect(polarisHorizontalCoordinates2.azimuth).toBe(polarisHorizontalCoordinates.azimuth);
+        expect(polarisHorizontalCoordinates2.altitude).toBe(polarisHorizontalCoordinates.altitude);
     });
 
 });

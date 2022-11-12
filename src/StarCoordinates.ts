@@ -116,15 +116,31 @@ export class HorizontalCoordinate {
      * Calculate HorizontalCoordinate from EquatorialCoordinate. Using the formula from
      * Meeus, Jean: Astronomical Algorithms. Second edition. Richmond, Virginia, 1998. Page 93.
      * @param eq Equatorial coordinate of the star
-     * @param lmst Local Mean Sidereal Time, in radians(!): 86400 seconds == 2 * PI
-     * @param phi observer latitude (on Earth), in radians
+     * @param lmstRad Local Mean Sidereal Time, in radians(!): 86400 seconds == 2 * PI
+     * @param phiRad observer latitude (on Earth), in radians
      * @return HorizontalCoordinate
      */
-    public static fromEquatorialCoordinate(eq : EquatorialCoordinate, lmst : number, phi : number) : HorizontalCoordinate
+    public static fromEquatorialCoordinateRadians(eq : EquatorialCoordinate, lmstRad : number, phiRad : number) : HorizontalCoordinate
     {
         return new HorizontalCoordinate(
-            eq.calculateAltitude(lmst, phi),
-            eq.calculateAzimuth(lmst, phi)
+            eq.calculateAltitude(lmstRad, phiRad),
+            eq.calculateAzimuth(lmstRad, phiRad)
+        )
+    }
+
+    /**
+     * Calculate HorizontalCoordinate from EquatorialCoordinate. Using the formula from
+     * Meeus, Jean: Astronomical Algorithms. Second edition. Richmond, Virginia, 1998. Page 93.
+     * @param eq Equatorial coordinate of the star
+     * @param lmstSeconds Local Mean Sidereal Time, in seconds
+     * @param phiDegree observer latitude (on Earth), in degree
+     * @return HorizontalCoordinate
+     */
+    public static fromEquatorialCoordinateDegree(eq : EquatorialCoordinate, lmstSeconds : number, phiDegree : number) : HorizontalCoordinate
+    {
+        return new HorizontalCoordinate(
+            eq.calculateAltitude(lmstSeconds / 86400 * 2 * Math.PI, phiDegree * 2 * Math.PI / 360),
+            eq.calculateAzimuth(lmstSeconds / 86400 * 2 * Math.PI, phiDegree * 2 * Math.PI / 360)
         )
     }
 

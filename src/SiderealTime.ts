@@ -1,3 +1,5 @@
+import {gregorianDateToJulianDayNumber} from "./JulianDate";
+
 /**
  * Calculate Greenwich Mean Sidereal Time (GMST) from julian day number, using the algorithm described in:
  * Meeus, Jean: Astronomical Algorithms. Second edition. Richmond, Virginia, 1998. Page 87.
@@ -11,7 +13,7 @@
  * per day) to get the number of seconds that have passed on the current day. For dates before J2000.0 the result is negative,
  * in this case add 86400 after the modulo operation.
  */
-export function julianDayNumberToGreenwichMeanSiderealTime(julianDayNumber : number)
+export function julianDayNumberToGreenwichMeanSiderealTime(julianDayNumber : number) : number
 {
     // see also
     // http://www.astro.sunysb.edu/metchev/AST443/times.html
@@ -29,7 +31,7 @@ export function julianDayNumberToGreenwichMeanSiderealTime(julianDayNumber : num
  * This is necessary for determining the Mean Sidereal Time at an arbitrary time of the day (which is not 0 UTC).
  * The resulting number of sidereal seconds is simply added to the MST at 0 UTC, to get the MST at the current time.
  */
-export function timeOfDayToSiderealSeconds(utcHours : number, utcMinutes : number, utcSeconds : number)
+export function timeOfDayToSiderealSeconds(utcHours : number, utcMinutes : number, utcSeconds : number) : number
 {
     return (60.0 * 60.0 * utcHours + 60.0 * utcMinutes + utcSeconds) * 1.00273790935;
 }
@@ -42,8 +44,39 @@ export function timeOfDayToSiderealSeconds(utcHours : number, utcMinutes : numbe
  * @param longitudeDegree
  * @return Local Mean Sidereal Time in seconds.
  */
-export function greenwichMeanSiderealTimeToLocalMeanSiderealTime(gmstSeconds : number, longitudeDegree : number)
+export function greenwichMeanSiderealTimeToLocalMeanSiderealTime(gmstSeconds : number, longitudeDegree : number) : number
 {
     // todo - is it sufficiently precise to simply "mod 86400" when the next day is reached?
     return (gmstSeconds + longitudeDegree / 360.0 * (60.0 * 60.0 * 24.0)) % (60.0 * 60.0 * 24.0);
+}
+
+/**
+ * Calculate Local Mean Sidereal Time from UTC DateTime and local longitude.
+ *
+ * This is a convenience function that calls
+ * - gregorianDateToJulianDayNumber
+ * - julianDayNumberToGreenwichMeanSiderealTime
+ * - timeOfDayToSiderealSeconds
+ * - greenwichMeanSiderealTimeToLocalMeanSiderealTime
+ * one after another to get the LMST.
+ *
+ * @param utcYear
+ * @param utcMonth - January == 1
+ * @param utcDay
+ * @param utcHours
+ * @param utcMinutes
+ * @param utcSeconds
+ * @param longitudeDegree - Observer location longitude on Earth, e.g. 13.41 for berlin
+ * @return Local Mean Sidereal Time in seconds.
+ */
+export function getLocalMeanSiderealTime(
+    utcYear : number, utcMonth : number, utcDay : number,
+    utcHours : number, utcMinutes : number, utcSeconds : number,
+    longitudeDegree : number) : number
+{
+    let jdnUtc0 = gregorianDateToJulianDayNumber(utcYear, utcMonth, utcDay);
+    let gmstUtc0 = julianDayNumberToGreenwichMeanSiderealTime(jdnUtc0);
+    let gmst = gmstUtc0 + timeOfDayToSiderealSeconds(utcHours, utcMinutes, utcSeconds);
+    let lmst = greenwichMeanSiderealTimeToLocalMeanSiderealTime(gmst, longitudeDegree);
+    return lmst;
 }

@@ -10,13 +10,29 @@ The main purpose of this library is the transformation of equatorial star coordi
 
 This allows to calculate the position of a star in the sky at a given observation time and place (on Earth).
 
-The library is not meant to be a precise tool for professional purposes, only as a sufficiently accurate approximation for amateur astronomy. Test results were in the range of < 0.5° deviation from https://stellarium.org/. 
+The library is not meant to be a precise tool for professional purposes, only as a sufficiently accurate approximation for amateur astronomy. Test results were in the range of < 0.5° deviation from https://stellarium.org/ (which is using more precise formulas for this calculation). 
 
 #### Usage
 
-For a full usage example see the coordinateConversion test in Gmst.test.ts - the following text describes the steps
-of this test in more detail.
+Usage example for getting the azimuth and altitude of Polaris. Observation in Berlin (52.52°N, 13.41°E) at 2022-11-06 19:00:29.
 
+Get the Local Mean Sidereal Time
+
+``let lmst = getLocalMeanSiderealTime(2022, 11, 6, 19, 0, 29, 13.41);``
+
+Create an EquatorialCoordinate object for the observed star, the equatorial coordinates (declination and right ascension) are constant and available e.g. in Wikipedia. In case of Polaris (Aa) the declination is 89° 15' 50.8'' and the right ascension is 2h 31m 49.09s.  
+
+``let polaris = EquatorialCoordinate.fromTimeAndDegree(89, 15, 50.8, 2, 31, 49.09);``
+
+Then the horizontal coordinates (azimuth and altitude) can be calculated from the LMST, the equatorial coordinate of Polaris, and the latitude of Berlin. 
+ 
+``let polarisHorizontalCoordinates =
+              HorizontalCoordinate.fromEquatorialCoordinateDegree(polaris, lmst, 52.52);``
+
+For more details and intermediate calculation steps see the coordinateConversion test in Gmst.test.ts.
+
+
+#### Background info about the calculation 
 
 ##### Calculating Greenwich Mean Sidereal Time (GMST)
 
