@@ -14,7 +14,7 @@ The library is not meant to be a precise tool for professional purposes, only as
 
 #### Usage
 
-Usage example for getting the azimuth and altitude of Polaris. Observation in Berlin (52.52°N, 13.41°E) at 2022-11-06 19:00:29.
+Usage example for getting the azimuth and altitude of Polaris. Observation in Berlin (52.52°N, 13.41°E) at 2022-11-06 19:00:29 UTC.
 
 Get the Local Mean Sidereal Time
 
@@ -29,7 +29,7 @@ Then the horizontal coordinates (azimuth and altitude) can be calculated from th
 ``let polarisHorizontalCoordinates =
               HorizontalCoordinate.fromEquatorialCoordinateDegree(polaris, lmst, 52.52);``
 
-For more details and intermediate calculation steps see the coordinateConversion test in Gmst.test.ts.
+For more details about intermediate calculation steps see the coordinateConversion test in Gmst.test.ts.
 
 
 #### Background info about the calculation 
@@ -46,7 +46,7 @@ Get GMST (in seconds) at 00:00:00 UT by using the JDN:
 
 Get GMST at another time (e.g. 16:15:27) of the day by adding the sidereal seconds (a sidereal second is 1.00273790935 times a calendar second):
 
-``let gmst_at_16_15_27 = gmst + 1.00273790935(16+60*60 + 15+60 + 27)``
+``let gmst_at_16_15_27 = gmst + 1.00273790935(16+60*60 + 15*60 + 27)``
 
 The result can contain several days and can be negative. Thus:
 
