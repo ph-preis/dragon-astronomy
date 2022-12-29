@@ -118,7 +118,7 @@ describe('coordinateConversion', () => {
 
         // this is the final result - we have converted equatorial coordinates to horizontal coordinates.
         expect(alt).toBe(0.9242257590670654); // in radians - for the polar star, this is by definition approximately the same as berlinLatitudeRad
-        expect(az).toBe(0.017126264029972325); // in radians
+        expect(az).toBe(0.017126264029972305); // in radians
 
         // do the same calculation again, just to test fromEquatorialCoordinateRadians()
         let polarisHorizontalCoordinates =

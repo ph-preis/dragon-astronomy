@@ -64,8 +64,8 @@ export class EquatorialCoordinate
     public calculateAzimuth(lmst : number, phi : number) : number {
         // H hour angle = theta - alpha = local sidereal time - right ascension
         let H = lmst - this.rightAscension;
-        let result = Math.atan(Math.sin(H) / (Math.sin(phi) * Math.cos(H) - Math.cos(phi) * Math.tan(this.declination)));
-        if (result <0 ) result += 2 * Math.PI;
+        let result = Math.atan2(Math.sin(H), (Math.sin(phi) * Math.cos(H) - Math.cos(phi) * Math.tan(this.declination)));
+        result += Math.PI;
         return result;
     }
 
